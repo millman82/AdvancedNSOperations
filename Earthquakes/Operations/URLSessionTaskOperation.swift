@@ -41,7 +41,7 @@ class URLSessionTaskOperation: Operation {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard context == &URLSessionTaksOperationKVOContext else { return }
         
-        if object === task && keyPath == "state" && task.state == .completed {
+        if object as? URLSessionTask === task && keyPath == "state" && task.state == .completed {
             task.removeObserver(self, forKeyPath: "state")
             finish()
         }

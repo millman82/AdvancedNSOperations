@@ -47,7 +47,7 @@ class EarthquakeTableViewController: UITableViewController {
         map.addAnnotation(annotation)
         
         nameLabel.text = earthquake.name
-        magnitudeLabel.text = Earthquake.magnitudeFormatter.string(from: earthquake.magnitude)
+        magnitudeLabel.text = Earthquake.magnitudeFormatter.string(from: NSNumber(value: earthquake.magnitude))
         depthLabel.text = Earthquake.depthFormatter.string(fromMeters: earthquake.depth)
         timeLabel.text = Earthquake.timestampFormatter.string(from: earthquake.timestamp)
         
@@ -92,7 +92,7 @@ class EarthquakeTableViewController: UITableViewController {
             an `Operation`, we can make it mutually exclusive with other operations
             that modify the view controller hierarchy.
         */
-        let shareOperation = BlockOperation { (continuation: @escaping (Void) -> Void) in
+        let shareOperation = BlockOperation { (continuation: @escaping () -> Void) in
             DispatchQueue.main.async {
                 let shareSheet = UIActivityViewController(activityItems: items, applicationActivities: nil)
                 
@@ -105,7 +105,7 @@ class EarthquakeTableViewController: UITableViewController {
                 
                 self.present(shareSheet, animated: true, completion: nil)
             }
-        } as! OperationBlock as! OperationBlock as! OperationBlock as! OperationBlock as! OperationBlock as! OperationBlock
+        }
         
         /*
             Indicate that this operation modifies the View Controller hierarchy

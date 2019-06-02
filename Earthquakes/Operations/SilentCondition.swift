@@ -34,7 +34,7 @@ struct SilentCondition<T: OperationCondition>: OperationCondition {
         return nil
     }
     
-    func evaluateForOperation(_ operation: Operation, completion: (OperationConditionResult) -> Void) {
+    func evaluateForOperation(_ operation: Operation, completion: @escaping (OperationConditionResult) -> Void) {
         condition.evaluateForOperation(operation, completion: completion)
     }
 }

@@ -73,6 +73,6 @@ class LocationOperation: Operation, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         stopLocationUpdates()
-        finishWithError(error)
+        finishWithError(error as NSError)
     }
 }
