@@ -98,7 +98,7 @@ class EarthquakeTableViewController: UITableViewController {
                 
                 shareSheet.popoverPresentationController?.barButtonItem = sender
 
-                shareSheet.completionWithItemsHandler = { _ in
+                shareSheet.completionWithItemsHandler = { (type, completed, items, error) in
                     // End the operation when the share sheet completes.
                     continuation()
                 }

@@ -18,16 +18,16 @@ import UIKit
 class BackgroundObserver: NSObject, OperationObserver {
     // MARK: Properties
 
-    fileprivate var identifier = UIBackgroundTaskInvalid
+    fileprivate var identifier = UIBackgroundTaskIdentifier.invalid
     fileprivate var isInBackground = false
     
     override init() {
         super.init()
         
         // We need to know when the application moves to/from the background.
-        NotificationCenter.default.addObserver(self, selector: #selector(BackgroundObserver.didEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(BackgroundObserver.didEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(BackgroundObserver.didEnterForeground(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(BackgroundObserver.didEnterForeground(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
         
         isInBackground = UIApplication.shared.applicationState == .background
         
@@ -56,7 +56,7 @@ class BackgroundObserver: NSObject, OperationObserver {
     }
     
     fileprivate func startBackgroundTask() {
-        if identifier == UIBackgroundTaskInvalid {
+        if identifier == UIBackgroundTaskIdentifier.invalid {
             identifier = UIApplication.shared.beginBackgroundTask(withName: "BackgroundObserver", expirationHandler: {
                 self.endBackgroundTask()
             })
@@ -64,9 +64,9 @@ class BackgroundObserver: NSObject, OperationObserver {
     }
     
     fileprivate func endBackgroundTask() {
-        if identifier != UIBackgroundTaskInvalid {
-            UIApplication.shared.endBackgroundTask(identifier)
-            identifier = UIBackgroundTaskInvalid
+        if identifier != UIBackgroundTaskIdentifier.invalid {
+            UIApplication.shared.endBackgroundTask(convertToUIBackgroundTaskIdentifier(identifier.rawValue))
+            identifier = UIBackgroundTaskIdentifier.invalid
         }
     }
     
@@ -79,4 +79,9 @@ class BackgroundObserver: NSObject, OperationObserver {
     func operationDidFinish(_ operation: Operation, errors: [NSError]) {
         endBackgroundTask()
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIBackgroundTaskIdentifier(_ input: Int) -> UIBackgroundTaskIdentifier {
+	return UIBackgroundTaskIdentifier(rawValue: input)
 }
