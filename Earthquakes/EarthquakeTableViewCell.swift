@@ -18,10 +18,10 @@ class EarthquakeTableViewCell: UITableViewCell {
     
     // MARK: Configuration
     
-    func configure(earthquake: Earthquake) {
-        timestampLabel.text = Earthquake.timestampFormatter.stringFromDate(earthquake.timestamp)
+    func configure(_ earthquake: Earthquake) {
+        timestampLabel.text = Earthquake.timestampFormatter.string(from: earthquake.timestamp)
 
-        magnitudeLabel.text = Earthquake.magnitudeFormatter.stringFromNumber(earthquake.magnitude)
+        magnitudeLabel.text = Earthquake.magnitudeFormatter.string(from: earthquake.magnitude)
         
         locationLabel.text = earthquake.name
         
