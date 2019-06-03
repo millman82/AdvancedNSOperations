@@ -23,7 +23,7 @@ struct CloudContainerCondition: OperationCondition {
     
     let container: CKContainer // this is the container to which you need access.
 
-    let permission: CKApplicationPermissions
+    let permission: CKContainer.Application.Permissions
     
     /**
         - parameter container: the `CKContainer` to which you need access.
@@ -31,28 +31,28 @@ struct CloudContainerCondition: OperationCondition {
             container. This parameter has a default value of `[]`, which would get
             you anonymized read/write access.
     */
-    init(container: CKContainer, permission: CKApplicationPermissions = []) {
+    init(container: CKContainer, permission: CKContainer.Application.Permissions = []) {
         self.container = container
         self.permission = permission
     }
     
-    func dependencyForOperation(operation: Operation) -> NSOperation? {
+    func dependencyForOperation(_ operation: Operation) -> Foundation.Operation? {
         return CloudKitPermissionOperation(container: container, permission: permission)
     }
     
-    func evaluateForOperation(operation: Operation, completion: OperationConditionResult -> Void) {
+    func evaluateForOperation(_ operation: Operation, completion: @escaping (OperationConditionResult) -> Void) {
         container.verifyPermission(permission, requestingIfNecessary: false) { error in
             if let error = error {
-                let conditionError = NSError(code: .ConditionFailed, userInfo: [
-                    OperationConditionKey: self.dynamicType.name,
-                    self.dynamicType.containerKey: self.container,
+                let conditionError = NSError(code: .conditionFailed, userInfo: [
+                    OperationConditionKey: type(of: self).name,
+                    type(of: self).containerKey: self.container,
                     NSUnderlyingErrorKey: error
                 ])
 
-                completion(.Failed(conditionError))
+                completion(.failed(conditionError))
             }
             else {
-                completion(.Satisfied)
+                completion(.satisfied)
             }
         }
     }
@@ -64,9 +64,9 @@ struct CloudContainerCondition: OperationCondition {
 */
 private class CloudKitPermissionOperation: Operation {
     let container: CKContainer
-    let permission: CKApplicationPermissions
+    let permission: CKContainer.Application.Permissions
     
-    init(container: CKContainer, permission: CKApplicationPermissions) {
+    init(container: CKContainer, permission: CKContainer.Application.Permissions) {
         self.container = container
         self.permission = permission
         super.init()

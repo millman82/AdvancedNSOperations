@@ -11,13 +11,13 @@ import Foundation
 let OperationErrorDomain = "OperationErrors"
 
 enum OperationErrorCode: Int {
-    case ConditionFailed = 1
-    case ExecutionFailed = 2
+    case conditionFailed = 1
+    case executionFailed = 2
 }
 
 extension NSError {
-    convenience init(code: OperationErrorCode, userInfo: [NSObject: AnyObject]? = nil) {
-        self.init(domain: OperationErrorDomain, code: code.rawValue, userInfo: userInfo)
+    convenience init(code: OperationErrorCode, userInfo: [AnyHashable: Any]? = nil) {
+        self.init(domain: OperationErrorDomain, code: code.rawValue, userInfo: userInfo as! [String : Any])
     }
 }
 
